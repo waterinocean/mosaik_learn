@@ -17,8 +17,7 @@ class Monitor(mosaik_api.Simulator):
     def __init__(self):
         super().__init__(META)
         self.eid = None
-        self.data = collections.defaultdict(lambda:
-                                            collections.defaultdict(dict))
+        self.data = collections.defaultdict(lambda: collections.defaultdict(dict))
 
     def create(self, num, model, **model_params):
         if num > 1 or self.eid is not None:
@@ -41,6 +40,7 @@ class Monitor(mosaik_api.Simulator):
             print("- %s" % sys)
             for key, values in sorted(attrs.items()):
                 print("- %s: %s" % (key, values))
-                
+
+
 if __name__ == "__main__":
     mosaik_api.start_simulation(Monitor())

@@ -2,7 +2,6 @@
 a simple add operate model, add an delta with an init val and get an output val
 """
 
-from pyexpat import model
 from time import time
 import mosaik_api
 
