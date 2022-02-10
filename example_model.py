@@ -8,7 +8,11 @@ import mosaik_api
 META = {
     "type": "time-based",
     "models": {
-        "Model": {"public": True, "params": ["init_val"], "attrs": ["val", "delta"]}
+        "Model": {
+            "public": True,
+            "params": ["init_val"],
+            "attrs": ["val_out", "delta_in"],
+        }
     },
 }
 
@@ -17,9 +21,12 @@ class ExampleModel(object):
     def __init__(self, init_val: int = 0) -> None:
         self.init_val = init_val
         self.val = self.init_val
+        self.delta = 1
 
-    def step(self, delta: int):
-        self.val += delta
+    def step(
+        self,
+    ):
+        self.val += self.delta
 
 
 class ExampleSim(mosaik_api.Simulator):
@@ -44,7 +51,13 @@ class ExampleSim(mosaik_api.Simulator):
 
     def step(self, time, inputs, max_advance):
         for model_name, model in self.entities.items():
-            model.step(1)
+            data = inputs.get(model_name, {})
+            for key, attrs in data.items():
+                if key == "delta_in":
+                    new_delta = sum(attrs.values())
+                    setattr(model, "delta", new_delta)
+
+            model.step()
             print(f"model name: {model_name}, val: {getattr(model, 'val')}")
 
         return time + 1
@@ -56,14 +69,13 @@ class ExampleSim(mosaik_api.Simulator):
                 data_to_send[model_name] = {}
 
             val = getattr(model, "val")
-            data_to_send[model_name]["val"] = val
-            data_to_send[model_name]["time"] = time
+            data_to_send[model_name]["val_out"] = val
 
         return data_to_send
 
 
 def main():
-    return mosaik_api.start_simulation(ExampleSim())
+    mosaik_api.start_simulation(ExampleSim())
 
 
 if __name__ == "__main__":

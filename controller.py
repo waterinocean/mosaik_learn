@@ -17,12 +17,41 @@ class Controller(mosaik_api.Simulator):
         super().__init__(META)
         self.entities = {}
         self.eid_prefix = "Controller_"
+        self.data = {}
 
     def create(self, num, model, **model_params):
-        return super().create(num, model, **model_params)
+        if model != "Controller":
+            raise Exception(
+                f"Can only instance model Controller but give param {model}!"
+            )
+
+        next_eid = len(self.entities)
+        entities = []
+        for i in range(next_eid, next_eid + num):
+            eid = f"{self.eid_prefix}{i}"
+            self.entities[eid] = eid
+            entities.append({"eid": eid, "type": model})
+
+        return entities
 
     def step(self, time, inputs, max_advance):
-        return super().step(time, inputs, max_advance)
+        self.data = {}
+        for eid, _ in self.entities.items():
+            data = inputs.get(eid, {})
+            self.data[eid] = {}
+
+            for key, attrs in data.items():
+                if key in "val_in":
+                    for _, attr in attrs.items():
+                        if attr >= 3:
+                            self.data[eid]["delta_out"] = -1
+                        elif attr <= -3:
+                            self.data[eid]["delta_out"] = 1
+        return None
 
     def get_data(self, outputs):
-        return super().get_data(outputs)
+        if self.data:
+            data_to_send, self.data = self.data, {}
+            return data_to_send
+
+        return None
