@@ -7,7 +7,7 @@ import mosaik_api
 META = {
     "type": "event-based",
     "models": {
-        "Controller": {"public": True, "params": [], "attrs": ["val_in", "delta_out"]}
+        "Controller": {"public": True, "params": [], "attrs": ["val_in", "delta"]}
     },
 }
 
@@ -41,12 +41,21 @@ class Controller(mosaik_api.Simulator):
             self.data[eid] = {}
 
             for key, attrs in data.items():
+                if key in "delta":
+                    if "2" in eid:
+                        dd = 1
+                    self.data[eid]["delta"] = sum(attrs.values())
+                    break
+
                 if key in "val_in":
+                    if "2" in eid:
+                        dd = 1
                     for _, attr in attrs.items():
                         if attr >= 3:
-                            self.data[eid]["delta_out"] = -1
+                            self.data[eid]["delta"] = -1
                         elif attr <= -3:
-                            self.data[eid]["delta_out"] = 1
+                            self.data[eid]["delta"] = 1
+
         return None
 
     def get_data(self, outputs):

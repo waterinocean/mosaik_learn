@@ -58,7 +58,7 @@ class ExampleSim(mosaik_api.Simulator):
                     setattr(model, "delta", new_delta)
 
             model.step()
-            print(f"model name: {model_name}, val: {getattr(model, 'val')}")
+            # print(f"model name: {model_name}, val: {getattr(model, 'val')}")
 
         return time + 1
 
