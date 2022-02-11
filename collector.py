@@ -43,4 +43,4 @@ class Monitor(mosaik_api.Simulator):
 
 
 if __name__ == "__main__":
-    mosaik_api.start_simulation(Monitor())
+    mosaik_api.start_simulation(Monitor(), "127.0.0.1:5555")

@@ -7,14 +7,14 @@ from mosaik.util import connect_many_to_one
 
 META = {
     "AddSim": {"python": "example_model:ExampleSim"},
-    "Monitor": {"python": "collector:Monitor"},
+    "Monitor": {"cmd": "%(python)s collector.py 127.0.0.1:5555"},
     "Controller": {"python": "controller:Controller"},
     "MasterController": {"python": "master_controller:MasterController"},
 }
 
 
 def main():
-    world = mosaik.World(META)
+    world = mosaik.World(META, debug=True)
 
     add_simu = world.start("AddSim")
     add_model_list = [add_simu.Model(init_val=i) for i in range(-2, 3, 2)]
@@ -42,7 +42,13 @@ def main():
     connect_many_to_one(world, controller_model_list, monitor_model, "delta")
     world.connect(master_controller_model, monitor_model, "delta_out")
 
+    print(world.entity_graph.nodes)
+    print(world.entity_graph.edges)
+
     world.run(until=20)
+
+    print(world.execution_graph.nodes)
+    print(world.execution_graph.edges)
 
 
 if __name__ == "__main__":
