@@ -2,8 +2,8 @@
 a simple scenario
 """
 
-import mosaik
-from mosaik.util import connect_many_to_one
+from mosaik_debug import mosaik
+# from mosaik.util import connect_many_to_one
 
 META = {
     "AddSim": {"python": "example_model:ExampleSim"},
@@ -38,8 +38,8 @@ def main():
             master_controller_model, controller_model, ("delta_out", "delta"), weak=True
         )
 
-    connect_many_to_one(world, add_model_list, monitor_model, "val_out")
-    connect_many_to_one(world, controller_model_list, monitor_model, "delta")
+    mosaik.util.connect_many_to_one(world, add_model_list, monitor_model, "val_out")
+    mosaik.util.connect_many_to_one(world, controller_model_list, monitor_model, "delta")
     world.connect(master_controller_model, monitor_model, "delta_out")
 
     print(world.entity_graph.nodes)

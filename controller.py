@@ -2,7 +2,7 @@
 an controller for add model, when val of add model beyond [-3, 3] then change the delta to 1 or -1
 """
 
-import mosaik_api
+from mosaik_debug import mosaik_api
 
 META = {
     "type": "event-based",

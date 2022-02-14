@@ -3,7 +3,7 @@ a simple add operate model, add an delta with an init val and get an output val
 """
 
 from time import time
-import mosaik_api
+from mosaik_debug import mosaik_api
 
 META = {
     "type": "time-based",

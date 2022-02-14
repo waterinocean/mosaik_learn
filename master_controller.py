@@ -2,7 +2,7 @@
 an master controller for all normal controllers
 """
 
-import mosaik_api
+from mosaik_debug import mosaik_api
 
 META = {
     "type": "event-based",
