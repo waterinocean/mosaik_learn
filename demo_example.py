@@ -30,7 +30,7 @@ def main():
 
     for add_model, controller_model in zip(add_model_list, controller_model_list):
         world.connect(add_model, controller_model, ("val_out", "val_in"))
-        world.connect(controller_model, add_model, ("delta", "delta_in"), weak=True)
+        world.connect(controller_model, add_model, ("delta", "delta_in"), time_shifted=True, initial_data={"delta": 0})
 
     for controller_model in controller_model_list:
         world.connect(controller_model, master_controller_model, ("delta", "delta_in"))
